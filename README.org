@@ -25,8 +25,8 @@ You will require:
  you reveal a single word to someone else, it can reduce the time it takes to
  solve your passphrase from something like 10000 years to 1 week. Every bit of
  entropy, effectively doubles the time it takes to solve a password. The fastest
- supercomputer on the planet at the time of this writing can apparently has 55
- bits of entropy per second.
+ supercomputer on the planet at the time of this writing can apparently crunch
+ through a 55-bit passphrase in a second.
 
 The command for passphrase suggestions is as follows:
 #+BEGIN_EXAMPLE sh
