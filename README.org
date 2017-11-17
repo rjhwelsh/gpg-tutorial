@@ -4,6 +4,7 @@
 
 * What is this?
 This is a fun tutorial I made to assist someone in making gpg-keys.
+For the best information and practices, please refer to [[https://www.gnupg.org/gph/en/manual.html][the gnupg manual]].
 
 * Dependencies
 You will require:
@@ -39,8 +40,9 @@ gpg --send-keys "$FINGERPRINT" # Sends your key to the keyservers
 #+END_EXAMPLE
 .
 ** Web of trust
- The uses my public key and fingerprint as an example of keysigning.
- If you do not trust my key, you can abort at any step with Ctrl-C.
+ This uses my public key and fingerprint as an example of keysigning.
+ *If you do not trust my key, you can abort at any step with =Ctrl-C=.*
+ GPG will also ask for your permission to sign my key.
  The set of commands are:
 #+BEGIN_EXAMPLE sh
 gpg --recv-key 553A180D # Download my public key, now you can encrypt things to me
@@ -82,5 +84,5 @@ gpg --decrypt $FILE.gpg
 If you would like to encrypt something into ASCII text, use the =--armor=
 option in addition to the above. These files usually have an =.asc= extension.
 
-For all the information, please see [[ https://www.gnupg.org/gph/en/manual.html][the gnupg manual]].
+For all the information, please see [[https://www.gnupg.org/gph/en/manual.html][the gnupg manual]].
 I hope you enjoyed my brief gpg tutorial.
