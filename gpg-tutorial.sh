@@ -101,7 +101,6 @@ function verify-this-script {
 	echo "PRESS ENTER TO CONTINUE>" && read -e blank
 	echo "example@bash$ gpg --verify $0.sig $0"
 	gpg --verify "$0.sig" "$0"
-	gpg --verify "words.txt.sig" "words.txt"
 	sleep 1 && echo ""
 }
 
@@ -112,7 +111,6 @@ function overwrite-signature {
 	echo "PRESS ENTER TO CONTINUE>" && read -e blank
 	echo "example@bash$ gpg --detach-sign $0"
 	gpg --detach-sign "$0"
-	gpg -b "words.txt"
 	sleep 1 && echo ""
 }
 
