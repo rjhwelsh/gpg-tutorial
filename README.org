@@ -27,9 +27,34 @@ You will require:
  entropy, effectively doubles the time it takes to solve a password. The fastest
  supercomputer on the planet at the time of this writing can apparently has 55
  bits of entropy per second.
+
+The command for passphrase suggestions is as follows:
+#+BEGIN_EXAMPLE sh
+# the WORDLIST file, this should be line delimited.
+read -e WORDLIST
+
+# The largest possible number that can be represented by 4 bytes, 2**(4*8)
+# divided by
+# The number of words in the wordlist, $(cat $WORDLIST |wc -l)
+FACTOR=$[ 2**(4*8)/$(cat "$WORDLIST"|wc -l) ]
+
+# Read 4 bytes of data from dev/random
+# Convert into a number, n
+# Select the first n lines from $WORDLIST
+# Take the last line as the randomly chosen word
+cat "$WORDLIST" | head -n "$[ $(od -vAn -N4 -tu4 < /dev/random ) / $FACTOR ]" | tail -1
+
+# Not too much entropy is required for this, far more is required for your gnupg private key. 32-bit for each word vs 2048-bit for default key.
+# 5 words would give you 180-bits of password entropy, provided that the wordlist used 2**32 different words.
+# Largest wordlist I have found is approximately 470k words, (2**18, 18-bits approx.), this would give you about 90-bits of entropy for 5 words.
+#+END_EXAMPLE
+
 ** Key Generation
  This step generates your private/public key pair using gpg. The command used is
- =gpg --gen-key=. Which uses your systems default settings.
+ #+BEGIN_EXAMPLE sh
+gpg --gen-key
+ #+END_EXAMPLE
+This uses your system's default settings.
 ** Uploading public key
  This step uploads your public key to a keyserver, for sharing with the world of
  the internets. The commands used are:
