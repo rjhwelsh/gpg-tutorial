@@ -1,0 +1,26 @@
+#+TITLE: Key-signing scripts
+#+AUTHOR: Roger J. H. Welsh
+#+EMAIL: rjhwelsh@gmail.com
+
+These scripts are to make exporting key signatures easier.
+
+Run
+#+BEGIN_SRC sh
+./export_keys_signed_by.sh $your_key
+#+END_SRC
+
+This will export all keys you have signed to a folder.
+=signed_keys/$email= for each key.
+
+Then run your favourite email client and attach:
+    - signed_key.asc :: encrypted key for recipient
+    - msg.asc :: encrypted instructions for recipient
+
+The recipient is then free to upload their signed keys to a keyserver, if they
+choose to do so.
+
+This is done by running the following on their end.
+#+BEGIN_SRC sh
+gpg -d signed_key.asc | gpg --import
+gpg --keyserver hkp://pool.sks-keyservers.net --send-key $their_key
+#+END_SRC
