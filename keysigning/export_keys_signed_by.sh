@@ -48,6 +48,10 @@ Regards,
 --
 $your_name
  0x$your_key
+
+P.S. The scripts I used to export my signed keys are available at
+https://github.com/rjhwelsh/gpg-tutorial/tree/master/keysigning
+Any criticism/advice here is appreciated.
 " | gpg --encrypt --sign --armor -u $your_key -r $your_key -r $their_key > signed_keys/$their_email/msg.asc
 
 done
