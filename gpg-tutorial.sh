@@ -90,7 +90,13 @@ function web-of-trust {
 	echo "Upload my signed key back to the pgp server"
 	echo "PRESS ENTER TO CONTINUE>" && read -e blank
 	echo "example@bash$ gpg --send-keys 553A180D"
-	gpg --send-keys 553A180D
+	# gpg --send-keys 553A180D
+	sleep 1 && echo ""
+
+	echo "PLEASE NOTE, not everyone would like their key
+uploaded directly to a pgp server.
+For exporting signed keys, encrypted for email,
+see 'keysigning' folder."
 	sleep 1 && echo ""
 
 	}
@@ -117,11 +123,11 @@ function overwrite-signature {
 
 function more-info {
 	echo "For encryption and decryption you can use:"
-	sleep 1 
+	sleep 1
 	echo "example@bash$ gpg --encrypt FILE"
-	sleep 2 
+	sleep 2
 	echo "example@bash$ gpg --decrypt FILE "
-	sleep 3 
+	sleep 3
 	echo "Respectively. See man gpg for more info."
 	sleep 4 && echo ""
 	echo "For a comprehensive overview and the security conscious (you should be),"
@@ -135,7 +141,7 @@ function more-info {
 	echo "Let's encrypt."
 }
 # Main
-intro 
+intro
 
 select WORD in all intro pass-gen key-gen upload-own-key web-of-trust \
 		verify-this-script overwrite-signature \
@@ -156,7 +162,3 @@ select WORD in all intro pass-gen key-gen upload-own-key web-of-trust \
 		*)exit;;
 	esac
 done
-
-	
-
-
