@@ -1,10 +1,19 @@
-#+TITLE: Key-signing scripts
+#+TITLE: Key-signing export scripts
 #+AUTHOR: Roger J. H. Welsh
 #+EMAIL: rjhwelsh@gmail.com
 
 These scripts are to make exporting key signatures easier.
 
-Run
+First, check fingerprints, verify identities and sign keys.
+#+BEGIN_SRC sh
+gpg --sign-key --fingerprint $key_id
+# OR
+gpg --edit-key $key_id
+gpg> fpr
+gpg> sign
+#+END_SRC
+
+To export ALL of your signed keys, run:
 #+BEGIN_SRC sh
 ./export_keys_signed_by.sh $your_key
 #+END_SRC
@@ -24,3 +33,13 @@ This is done by running the following on their end.
 gpg -d signed_key.asc | gpg --import
 gpg --keyserver hkp://pool.sks-keyservers.net --send-key $their_key
 #+END_SRC
+
+* Troubleshooting
+
+** sign+encrypt failed: Unusable public key
+This usually means that encryption key is unavailable for the keyid.
+You will need to contact the user for their encryption key, or ask if they would
+like you upload it for them to a keyserver.
+
+Alternatively, it could mean that you do not have a signing key, and cannot
+sign. If this were the case you would get this error for every key you tried to sign.
