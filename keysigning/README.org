@@ -4,6 +4,7 @@
 
 These scripts are to make exporting key signatures easier.
 
+* Sign keys, /manually/
 First, check fingerprints, verify identities and sign keys.
 #+BEGIN_SRC sh
 gpg --sign-key --fingerprint $key_id
@@ -13,6 +14,7 @@ gpg> fpr
 gpg> sign
 #+END_SRC
 
+* Export keys, /automatically/
 To export ALL of your signed keys, run:
 #+BEGIN_SRC sh
 ./export_keys_signed_by.sh $your_key
@@ -25,6 +27,7 @@ Then run your favourite email client and attach:
     - signed_key.asc :: encrypted key for recipient
     - msg.asc :: encrypted instructions for recipient
 
+* Instructions for /recipents/ of signed keys
 The recipient is then free to upload their signed keys to a keyserver, if they
 choose to do so.
 
@@ -33,6 +36,45 @@ This is done by running the following on their end.
 gpg -d signed_key.asc | gpg --import
 gpg --keyserver hkp://pool.sks-keyservers.net --send-key $their_key
 #+END_SRC
+
+
+* Export keys, /manually/
+Or, "how the script is meant to work".
+
+
+First, we must gather important information about:
+ 1. Your signing key. (=your_key=)
+ 2. The key you have just signed. (=their_key=)
+
+For example, define them as variables;
+#+begin_src sh
+# This could be your key
+your_key=8CCF62043A386BEBEBEB4554647F892675799A1B
+your_email=xyz@abc.com
+
+# This could be your friend's key
+their_key=A2F22640A3A3B6EEBEBB44556F7A29675799B41A
+their_email=abc@xyz.com
+
+# Create a folder for storing the exported key
+mkdir -vp signed_keys/$their_email
+#+end_src
+
+Now, using the variables, we can chain together several commands.
+These commands will:
+    1. Export =their_key= in armored ascii format.
+    2. Encrypt the exported key with both =your_key= and =their_key=.
+    3. Sign the encrypted message with =your_key=.
+    4. Output into folder, named =their_email= for sending.
+
+    #+begin_src sh
+      gpg --export --armor $their_key |\
+	  gpg --encrypt --armor -r $your_key -r $their_key \
+	      --sign -u $your_key \
+	      > signed_keys/$their_email/signed_key.asc
+    #+end_src
+
+Now, you should be able to attach the file =signed_key.asc= to an email and send it to your friend.
 
 * Troubleshooting
 
