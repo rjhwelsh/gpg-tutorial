@@ -24,11 +24,10 @@ do
 	mkdir -vp signed_keys/$their_email
 
 	# Export signed keys for each id
-	gpg --export --armor $their_key |\
-		gpg --encrypt --sign --armor -u $your_key -r $your_key -r $their_key > signed_keys/$their_email/signed_key.asc
-
-	# Create msg for each key
-	echo "Hi$their_name,
+	(
+	    declare SIGNED_KEY=`gpg --export --armor $their_key`
+	    # Create msg for each key
+	    declare MSG="Hi$their_name,
 Please find attached the signed key for $their_email
 of your key $their_key signed by me.
 
@@ -52,6 +51,31 @@ $your_name
 P.S. The scripts I used to export my signed keys are available at
 https://github.com/rjhwelsh/gpg-tutorial/tree/master/keysigning
 Any criticism/advice here is appreciated.
-" | gpg --encrypt --sign --armor -u $your_key -r $your_key -r $their_key > signed_keys/$their_email/msg.asc
+"
+	    {
+		echo "$SIGNED_KEY" |\
+		    gpg --encrypt --armor -r $your_key -r $their_key \
+			--sign -u $your_key \
+			> signed_keys/$their_email/signed_key.asc
+		echo "$MSG" |\
+		    gpg --encrypt --armor -r $your_key -r $their_key \
+			--sign -u $your_key \
+			> signed_keys/$their_email/msg.asc
+	    } ||
+		# Fallback onto symmetric encryption (e.g. if there is no key to encrypt to)
+		{
+		    echo "$SIGNED_KEY" |\
+			gpg --encrypt --armor -r $your_key --symmetric \
+			    --sign -u $your_key \
+			    > signed_keys/$their_email/signed_key.asc
+		    echo "$MSG" |\
+			gpg --encrypt --armor -r $your_key --symmetric \
+			    --sign -u $your_key \
+			    > signed_keys/$their_email/msg.asc
+		}
 
+	    # Clear variables
+	    unset MSG
+	    unset SIGNED_KEY
+	)
 done
