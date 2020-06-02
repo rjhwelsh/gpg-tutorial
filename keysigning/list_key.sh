@@ -1,5 +1,5 @@
 #!/bin/sh
 
-# Lists key at the top of your keychain
+# Lists key at the bottom of your keychain (latest?)
 # OR A key you specify
-gpg -k --fingerprint $1 |head -n 4 |tail -n 1 |sed 's/ //g'|cut -c 25-
+gpg -k $1 |grep -Po '[0-9ABCDEF]{40}' |tail -n 1
