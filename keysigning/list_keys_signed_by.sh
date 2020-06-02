@@ -1,8 +1,6 @@
 #!/bin/sh
 
-
-default_keyid=`./list_key.sh $1`
-keyid=${1:-$default_keyid}
+keyid=`./list_key.sh $1`
 
 gpg --with-colons --fingerprint --list-sigs |
 while read line; do
